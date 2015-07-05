@@ -1,0 +1,76 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define N 2000000
+struct node {
+	int p, s;
+	bool x;
+	struct node* arr[26];
+} trie[26];
+
+char str[N + 1];
+int kmp[N + 1];
+int n, res;
+void insert(node* curr, int i) {
+	if (i == n - 1) {
+		if (curr->x) {
+			res += 2 * (curr->s);
+			res += 2 * (curr->p);
+		}
+		curr->x = 1;
+		curr->s++;
+		return;
+	}
+	if (kmp[n - 1 - i] == n - 1 - i) {
+		if (curr->x) {
+			res += 2 * (curr->s);
+			res += 2 * (curr->p);
+		}
+		curr->p++;
+	}
+	curr->x = 1; //mark as visted
+	node* c = &trie[str[i + 1] - 'a'];
+	insert(c, i + 1);
+}
+
+void KMP() {
+	int k, i;
+	kmp[0] = k = 0;
+	for (i = 1; i < n; i++) {
+		while (k > 0 && str[i] != str[k])
+			k = kmp[k - 1];
+		if (str[i] == str[k])
+			k++;
+		kmp[i] = k;
+	}
+}
+
+void KMP_REV() {
+	int k, i;
+	int s = n - 1;
+	kmp[s] = k = 0;
+	for (i = 1; i < n; i++) {
+		while (k > 0 && str[s - i] != str[s - k])
+			k = str[s - k - 1];
+		if (str[s - i] == str[s - k])
+			k++;
+		kmp[s - i] = k;
+	}
+}
+
+int main() {
+	int t;
+	cin >> t;
+	res = t;
+	while (t--) {
+		cin >> n >> str;
+		KMP();
+		for (int i = 0; i < n; i++)
+			cout << kmp[i] << " ";
+		cout << endl;
+		node* c = &trie[str[0] - 'a'];
+		insert(c, 0);
+		cout << c->s << " " << c->p << " " << c->x << endl;
+	}
+	cout << res << endl;
+	return 0;
+}
