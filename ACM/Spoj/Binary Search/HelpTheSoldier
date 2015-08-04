@@ -1,0 +1,39 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int N, T;
+int c[6], nums[2][6][210], DP[6][1005][1005];
+
+int getMax(int currType, int currMax, int currPrice) {
+	if (currPrice < 0)
+		return 0;
+	if (currType > 5)
+		return currMax;
+	if (DP[currType][currMax][currPrice] != -1) {
+		return DP[currType][currMax][currPrice];
+	}
+	int m = 0, i;
+	for (i = 0; i < c[currType]; i++) {
+		m = max(m,
+				getMax(currType + 1, min(currMax, nums[1][currType][i]),
+						currPrice - nums[0][currType][i]));
+	}
+	return DP[currType][currMax][currPrice] = m;
+}
+
+int main() {
+	memset(DP, -1, sizeof(DP));
+	scanf("%d %d", &N, &T);
+	int t, p, q;
+	for (int i = 0; i < N; i++) {
+		scanf("%d %d %d", &t, &p, &q);
+		t--;
+		if (t > 5 || t < 0)
+			continue;
+		nums[0][t][c[t]] = p;
+		nums[1][t][c[t]++] = q;
+	}
+	printf("%d\n", getMax(0, 1004, T));
+	return 0;
+}

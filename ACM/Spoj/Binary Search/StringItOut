@@ -1,0 +1,40 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int T, x, y;
+char X[500020], Y[500020];
+int check(int c) {
+	int i, j, k = 0;
+	for (i = 0; i < x; i++)
+		for (j = 0; j < c; j++) {
+			if (k >= y)
+				return 0;
+			if (X[i] != Y[k])
+				j--;
+			k++;
+		}
+	return 1;
+}
+int main() {
+	cin >> T;
+	int lo, hi, mid;
+	while (T--) {
+		cin >> X;
+		cin >> Y;
+		x = strlen(X);
+		y = strlen(Y);
+		lo = -1;
+		hi = 500010;
+		while (lo + 1 < hi) {
+			mid = (lo + hi) >> 1;
+			if (check(mid)) {
+				lo = mid;
+			} else {
+				hi = mid;
+			}
+		}
+		cout << lo << endl;
+	}
+	return 0;
+}

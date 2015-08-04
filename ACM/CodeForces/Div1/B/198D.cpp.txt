@@ -1,0 +1,33 @@
+#include <bits/stdc++.h>
+using namespace std;
+int numsA[100001], numsB[100001];
+int main() {
+	int k, a, b;
+	scanf("%d %d %d", &a, &b, &k);
+	for (int i = 0; i < a; i++) {
+		scanf("%d", &numsA[i]);
+	}
+	for (int i = 0; i < b; i++) {
+		scanf("%d", &numsB[i]);
+	}
+	if (a > b) {
+		printf("YES\n");
+	} else {
+		sort(numsA, numsA + a);
+		sort(numsB, numsB + b);
+		bool flag = 1;
+		for (int i = a - 1, j = b - 1; i >= 0 && j >= 0; i--, j--) {
+			if (numsA[i] > numsB[j]) {
+				flag = 0;
+				printf("YES\n");
+				break;
+			}
+		}
+		if (flag)
+			printf("NO\n");
+
+	}
+	return 0;
+
+}
+
